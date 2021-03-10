@@ -1,0 +1,18 @@
+import os
+import random
+from string import ascii_letters, digits
+
+FILENAME_LEN = 10
+FILE_EXTENSION = ".txt"
+ENVVAR_ROOT = "FILE_SERVER_ROOT"
+
+
+def get_path_from_arg(path):
+    if os.path.isdir(path):
+        return path
+    else:
+        raise FileNotFoundError("Directory is not exists")
+
+
+def generate_random_file_name():
+    return "".join(random.choice(ascii_letters + digits) for _ in range(FILENAME_LEN)) + FILE_EXTENSION
