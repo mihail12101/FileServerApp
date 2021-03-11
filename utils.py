@@ -8,10 +8,10 @@ ENVVAR_ROOT = "FILE_SERVER_ROOT"
 
 
 def get_path_from_arg(path):
-    if os.path.isdir(path):
-        return path
-    else:
-        raise FileNotFoundError("Directory is not exists")
+    if not os.path.isdir(path):
+        raise NameError("Directory is not exists")
+
+    return path
 
 
 def generate_random_file_name():
