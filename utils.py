@@ -21,6 +21,25 @@ def name_param_is_not_none(name=None):
         raise ValueError("Parameter - name is absent or has wrong value")
 
 
+def check_file_existence(name=None):
+    """ Check for file existence
+
+    * Checks that name param is not None
+    * Builds path to provided file
+    * Check file existence
+
+    :param name: file name
+    :return: file path
+    """
+    name_param_is_not_none(name)
+    file_path = merge_filename_with_root(name)
+
+    if not os.path.isfile(file_path):
+        raise NameError("Given file {} not exists in directory {}".format(name, file_path))
+
+    return file_path
+
+
 def merge_filename_with_root(name):
     name_param_is_not_none()
     return os.path.join(WORK_DIRECTORY, name)
