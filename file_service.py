@@ -5,6 +5,9 @@ from utils import generate_random_file_name
 
 
 def read_file(name=None):
+    if name is None:
+        raise ValueError("Parameter - name is absent or has wrong value")
+
     root = WORK_DIRECTORY
     dst_path = os.path.join(root, name)
 
