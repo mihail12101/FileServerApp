@@ -2,9 +2,7 @@ import os
 import random
 from string import ascii_letters, digits
 
-FILENAME_LEN = 10
-FILE_EXTENSION = ".txt"
-ENVVAR_ROOT = "FILE_SERVER_ROOT"
+from config import FILENAME_LEN, FILE_EXTENSION
 
 
 def get_path_from_arg(path):
