@@ -19,6 +19,9 @@ def read_file(name=None):
 
 
 def delete_file(name=None):
+    if name is None:
+        raise ValueError("Parameter - name is absent or has wrong value")
+    
     root = WORK_DIRECTORY
     dst_path = os.path.join(root, name)
 
