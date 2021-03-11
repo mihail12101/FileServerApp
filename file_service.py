@@ -1,6 +1,6 @@
 import os
 
-from utils import generate_random_file_name, name_param_is_not_none, merge_filename_with_root, check_file_existence
+from utils import generate_random_file_name, merge_filename_with_root, check_file_existence
 
 
 def read_file(name=None):
@@ -32,5 +32,5 @@ def create_file():
 
 
 def get_metadata(name=None):
-    name_param_is_not_none(name)
-    # dst_path = merge_filename_with_root(name)
+    file_path = check_file_existence(name)
+    return os.stat(file_path)
