@@ -1,5 +1,3 @@
-import os
-
 from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION, DEFAULT_FILE_CONTENT
 
 
