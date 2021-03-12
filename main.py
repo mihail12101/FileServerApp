@@ -1,7 +1,8 @@
 import argparse
 import os
 
-from utils import ENVVAR_ROOT, get_path_from_arg
+from config import ENVVAR_ROOT
+from utils import get_path_from_arg
 
 parser = argparse.ArgumentParser(description='Parse args for FileServerApp')
 parser.add_argument("--src-dir", type=get_path_from_arg, help="Working directory", required=True)
