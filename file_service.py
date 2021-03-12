@@ -1,6 +1,23 @@
+import logging
 import os
 
 from utils import generate_random_file_name, merge_filename_with_root, check_file_existence
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# create console handler and set level to debug
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+
+# create formatter
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# add formatter to ch
+ch.setFormatter(formatter)
+
+# add ch to logger
+logger.addHandler(ch)
 
 
 def read_file(name=None):
@@ -28,6 +45,7 @@ def delete_file(name=None):
         return
 
     os.remove(file_path)
+    logger.info("File {} was removed".format(name))
 
 
 def create_file():
@@ -40,6 +58,8 @@ def create_file():
 
     with open(dst_path, "wt") as new_file:
         new_file.write("some text")
+
+    logger.info("File {} was created".format(file_name))
 
     return file_name
 
