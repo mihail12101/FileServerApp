@@ -11,7 +11,7 @@ import os
 import random
 from string import ascii_letters, digits
 
-from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_ROOT
+from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT
 
 
 def get_path_from_arg(path):
@@ -75,5 +75,5 @@ def merge_filename_with_root(name=None):
     :return: string with <path to given file>
     """
     name_param_is_not_none(name)
-    work_directory = os.path.normpath(os.getenv(ENVVAR_ROOT))
+    work_directory = os.path.normpath(os.getenv(ENVVAR_NAME_ROOT))
     return os.path.join(work_directory, name)
