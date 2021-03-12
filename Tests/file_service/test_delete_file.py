@@ -24,7 +24,7 @@ def test_delete_none_file():
     assert False
 
 
-def test_delete_not_existing_file():
+def test_delete_non_existing_file():
     # Arrange
     # Not None name, but not exists
     empty_name = ""
