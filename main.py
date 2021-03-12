@@ -1,3 +1,8 @@
+"""Main entry point to work with FileServerApp
+
+Available arguments:
+    * --src-dir "path to the directory" - The directory will used for work with files
+"""
 import argparse
 import os
 
@@ -9,6 +14,7 @@ parser.add_argument("--src-dir", type=get_path_from_arg, help="Working directory
 
 
 def main():
+    """Wrapper for main function"""
     args = parser.parse_args()
     os.environ[ENVVAR_ROOT] = os.path.normpath(args.src_dir)
 
