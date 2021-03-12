@@ -1,6 +1,7 @@
 import logging
 import os
 
+from FileServerApp.config import DEFAULT_FILE_CONTENT
 from utils import generate_random_file_name, merge_filename_with_root, check_file_existence
 
 logger = logging.getLogger(__name__)
@@ -58,7 +59,7 @@ def create_file():
     dst_path = merge_filename_with_root(file_name)
 
     with open(dst_path, "wt") as new_file:
-        new_file.write("some text")
+        new_file.write(DEFAULT_FILE_CONTENT)
 
     logger.info("File {} was created".format(file_name))
 

@@ -15,3 +15,7 @@ def test_config_has_constant_envvar_name_root():
 
 def test_config_has_constant_symbols():
     assert hasattr(config, "SYMBOLS")
+
+
+def test_config_has_constant_default_file_content():
+    assert hasattr(config, "DEFAULT_FILE_CONTENT")
