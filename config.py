@@ -1,3 +1,4 @@
+"""Config module stores all available constants are used inside the code"""
 from string import ascii_letters, digits
 
 FILENAME_LEN = 10
