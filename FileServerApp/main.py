@@ -5,6 +5,7 @@ Available arguments:
 """
 import argparse
 import os
+import sys
 
 from config import ENVVAR_NAME_ROOT
 from utils import get_path_from_arg
@@ -13,11 +14,11 @@ parser = argparse.ArgumentParser(description='Parse args for FileServerApp')
 parser.add_argument("--src-dir", type=get_path_from_arg, help="Working directory", required=True)
 
 
-def main():
+def main(args):
     """Wrapper for main function"""
-    args = parser.parse_args()
+    args = parser.parse_args(args=args)
     os.environ[ENVVAR_NAME_ROOT] = os.path.normpath(args.src_dir)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)

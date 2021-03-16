@@ -1,3 +1,5 @@
+import pytest
+
 from FileServerApp.config import DEFAULT_FILE_CONTENT
 from FileServerApp.file_service import read_file
 
@@ -13,15 +15,9 @@ def test_read_existing_file(create_file_function):
 
 def test_read_none_file():
     # Act
-    try:
+    # Should raise ValueError if name was not provided
+    with pytest.raises(ValueError):
         read_file(None)
-    except ValueError:
-        # Should raise ValueError if name was not provided
-        assert True
-        return
-
-    # Failed in case of not provided filename
-    assert False
 
 
 def test_read_non_existing_file():
@@ -29,12 +25,6 @@ def test_read_non_existing_file():
     # Not None name, but not exists
     empty_name = ""
 
-    try:
+    # Should raise NameError if file provided, but not exists
+    with pytest.raises(NameError):
         read_file(empty_name)
-    except NameError:
-        # Should raise NameError if file provided, but not exists
-        assert True
-        return
-
-    # Failed in case of absent of file
-    assert False
