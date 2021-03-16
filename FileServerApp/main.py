@@ -16,7 +16,7 @@ parser.add_argument("--src-dir", type=get_path_from_arg, help="Working directory
 
 def main(args):
     """Wrapper for main function"""
-    args = parser.parse_args(args=args)
+    args = parser.parse_args(args=args[1:])
     os.environ[ENVVAR_NAME_ROOT] = os.path.normpath(args.src_dir)
 
 

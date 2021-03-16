@@ -11,7 +11,7 @@ import os
 import random
 from string import ascii_letters, digits
 
-from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT
+from config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT
 
 
 def get_path_from_arg(path):

@@ -1,7 +1,7 @@
 import logging
 import os
 
-from FileServerApp.config import DEFAULT_FILE_CONTENT
+from config import DEFAULT_FILE_CONTENT, LOG_LEVEL, LOG_FORMAT
 from utils import generate_random_file_name, merge_filename_with_root, check_file_existence
 
 logger = logging.getLogger(__name__)
@@ -9,10 +9,10 @@ logger.setLevel(logging.INFO)
 
 # create console handler and set level to debug
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+ch.setLevel(LOG_LEVEL)
 
 # create formatter
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter(LOG_FORMAT)
 
 # add formatter to ch
 ch.setFormatter(formatter)
