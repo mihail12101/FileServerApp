@@ -22,7 +22,7 @@ logger.addHandler(ch)
 
 
 def read_file(name=None):
-    """Returns content from the given file
+    """Return content from the given file
 
     :param name: string with <file name + file extension>
     :return: string with <file content>
@@ -67,7 +67,7 @@ def create_file():
 
 
 def get_metadata(name=None):
-    """Returns stat object with metadata inside
+    """Return stat object with metadata inside
 
     :param name: string with <file name + file extension>
     :return: stat obejct with metadata
