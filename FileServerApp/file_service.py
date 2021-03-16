@@ -1,7 +1,7 @@
 import logging
 import os
 
-from FileServerApp.config import DEFAULT_FILE_CONTENT
+from config import DEFAULT_FILE_CONTENT, LOG_LEVEL, LOG_FORMAT
 from utils import generate_random_file_name, merge_filename_with_root, check_file_existence
 
 logger = logging.getLogger(__name__)
@@ -9,10 +9,10 @@ logger.setLevel(logging.INFO)
 
 # create console handler and set level to debug
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+ch.setLevel(LOG_LEVEL)
 
 # create formatter
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter(LOG_FORMAT)
 
 # add formatter to ch
 ch.setFormatter(formatter)
@@ -21,8 +21,8 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-def read_file(name=None):
-    """Returns content from the given file
+def read_file(name):
+    """Return content from the given file
 
     :param name: string with <file name + file extension>
     :return: string with <file content>
@@ -35,7 +35,7 @@ def read_file(name=None):
     return file_content
 
 
-def delete_file(name=None):
+def delete_file(name):
     """Remove file if exists
 
     :param name: string with <file name + file extension>
@@ -66,8 +66,8 @@ def create_file():
     return file_name
 
 
-def get_metadata(name=None):
-    """Returns stat object with metadata inside
+def get_metadata(name):
+    """Return stat object with metadata inside
 
     :param name: string with <file name + file extension>
     :return: stat obejct with metadata

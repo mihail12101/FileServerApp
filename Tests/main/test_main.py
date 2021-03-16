@@ -6,7 +6,7 @@ from FileServerApp.main import main
 
 def test_main(tmpdir, prepare_test_environment):
     path = os.path.normpath(str(tmpdir))
-    main(["--src-dir", path])
+    main(["", "--src-dir", path])
     assert os.getenv(ENVVAR_NAME_ROOT) == path
 
     # POST condition
