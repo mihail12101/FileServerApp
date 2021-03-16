@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from os import stat_result
 
 import pytest
@@ -10,7 +11,9 @@ def test_metadata_type(path_to_new_file):
     meta = get_metadata(path_to_new_file)
 
     # Assert
-    assert isinstance(meta, stat_result)
+    assert isinstance(meta, OrderedDict)
+    for key in ("name", "create_date", "size", "content"):
+        assert key in meta
 
 
 def test_metadata_none_file_provided():

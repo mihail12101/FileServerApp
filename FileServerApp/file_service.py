@@ -1,8 +1,9 @@
 import logging
 import os
+from collections import OrderedDict
 
 from config import DEFAULT_FILE_CONTENT, LOG_LEVEL, LOG_FORMAT
-from utils import generate_random_file_name, merge_filename_with_root, check_file_existence
+from utils import generate_random_file_name, merge_filename_with_root, check_file_existence, convert_datetime
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -73,4 +74,9 @@ def get_metadata(name):
     :return: stat obejct with metadata
     """
     file_path = check_file_existence(name)
-    return os.stat(file_path)
+    return OrderedDict(
+        name=name,
+        create_date=convert_datetime(os.path.getctime(file_path)),
+        size=os.path.getsize(file_path),
+        content=read_file(name)
+    )
