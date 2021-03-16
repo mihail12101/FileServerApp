@@ -1,14 +1,13 @@
 from collections import OrderedDict
-from os import stat_result
 
 import pytest
 
 from FileServerApp.file_service import get_metadata
 
 
-def test_metadata_type(path_to_new_file):
+def test_metadata_type(create_file_module):
     # Act
-    meta = get_metadata(path_to_new_file)
+    meta = get_metadata(create_file_module)
 
     # Assert
     assert isinstance(meta, OrderedDict)
