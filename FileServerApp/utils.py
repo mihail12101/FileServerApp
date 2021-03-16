@@ -11,7 +11,7 @@ import os
 import random
 from string import ascii_letters, digits
 
-from config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_ROOT
+from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT
 
 
 def get_path_from_arg(path):
@@ -46,6 +46,21 @@ def name_param_is_not_none(name=None):
         raise ValueError("Parameter - name is absent or has wrong value")
 
 
+def merge_filename_with_root(name=None):
+    """Common operations for work with files
+
+        * Check that given file name is not None
+        * Getting WORK DIRECTORY from environment variables
+        * Concatanate WORK DIRECTORY and filename
+
+    :param name: string with <file name + file extension>
+    :return: string with <path to given file>
+    """
+    name_param_is_not_none(name)
+    work_directory = os.path.normpath(os.getenv(ENVVAR_NAME_ROOT))
+    return os.path.join(work_directory, name)
+
+
 def check_file_existence(name=None):
     """Check for file existence
 
@@ -62,18 +77,3 @@ def check_file_existence(name=None):
         raise NameError("Given file {} not exists in directory {}".format(name, file_path))
 
     return file_path
-
-
-def merge_filename_with_root(name=None):
-    """Common operations for work with files
-
-        * Check that given file name is not None
-        * Getting WORK DIRECTORY from environment variables
-        * Concatanate WORK DIRECTORY and filename
-
-    :param name: string with <file name + file extension>
-    :return: string with <path to given file>
-    """
-    name_param_is_not_none(name)
-    work_directory = os.path.normpath(os.getenv(ENVVAR_ROOT))
-    return os.path.join(work_directory, name)
