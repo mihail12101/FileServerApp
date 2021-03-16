@@ -11,7 +11,7 @@ import os
 import random
 from string import ascii_letters, digits
 
-from config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT
+from config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT, SYMBOLS
 
 
 def get_path_from_arg(path):
@@ -32,7 +32,7 @@ def generate_random_file_name():
 
     :return: string with <file name + file extension>
     """
-    return "".join(random.choice(ascii_letters + digits) for _ in range(FILENAME_LEN)) + FILE_EXTENSION
+    return "".join(random.choice(SYMBOLS) for _ in range(FILENAME_LEN)) + FILE_EXTENSION
 
 
 def name_param_is_not_none(name=None):
