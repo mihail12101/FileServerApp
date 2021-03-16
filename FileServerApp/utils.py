@@ -9,7 +9,6 @@ List of available functions:
 """
 import os
 import random
-from string import ascii_letters, digits
 
 from config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT, SYMBOLS
 
@@ -35,18 +34,25 @@ def generate_random_file_name():
     return "".join(random.choice(SYMBOLS) for _ in range(FILENAME_LEN)) + FILE_EXTENSION
 
 
-def name_param_is_not_none(name=None):
+def name_param_is_not_none(func_to_dec):
     """Raise ValueError if given parameter 'name' is none
 
-    :param name: string with <file name + file extension>
-    :return: None
+    Decorator!
+
+    :param func_to_dec: any called function, string with <file name + file extension>
+    :return: decorated function
     """
-    """"""
-    if name is None:
-        raise ValueError("Parameter - name is absent or has wrong value")
+    def wrapper(arg):
+        if arg is None:
+            raise ValueError("Parameter - name is absent or has wrong value")
+
+        return func_to_dec(arg)
+
+    return wrapper
 
 
-def merge_filename_with_root(name=None):
+@name_param_is_not_none
+def merge_filename_with_root(name):
     """Common operations for work with files
 
         * Check that given file name is not None
@@ -56,12 +62,12 @@ def merge_filename_with_root(name=None):
     :param name: string with <file name + file extension>
     :return: string with <path to given file>
     """
-    name_param_is_not_none(name)
     work_directory = os.path.normpath(os.getenv(ENVVAR_NAME_ROOT))
     return os.path.join(work_directory, name)
 
 
-def check_file_existence(name=None):
+@name_param_is_not_none
+def check_file_existence(name):
     """Check for file existence
 
         * Checks that name param is not None

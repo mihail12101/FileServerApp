@@ -21,7 +21,7 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-def read_file(name=None):
+def read_file(name):
     """Return content from the given file
 
     :param name: string with <file name + file extension>
@@ -35,7 +35,7 @@ def read_file(name=None):
     return file_content
 
 
-def delete_file(name=None):
+def delete_file(name):
     """Remove file if exists
 
     :param name: string with <file name + file extension>
@@ -66,7 +66,7 @@ def create_file():
     return file_name
 
 
-def get_metadata(name=None):
+def get_metadata(name):
     """Return stat object with metadata inside
 
     :param name: string with <file name + file extension>
