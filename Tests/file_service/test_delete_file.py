@@ -1,5 +1,7 @@
 import os
 
+import pytest
+
 from FileServerApp.file_service import delete_file
 
 
@@ -13,15 +15,9 @@ def test_delete_existing_file(create_file_function, path_to_new_file_function):
 
 def test_delete_none_file():
     # Act
-    try:
+    # Should raise ValueError if name was not provided
+    with pytest.raises(ValueError):
         delete_file(None)
-    except ValueError:
-        # Should raise ValueError if name was not provided
-        assert True
-        return
-
-        # Failed in case of not provided filename
-    assert False
 
 
 def test_delete_non_existing_file():
@@ -30,11 +26,5 @@ def test_delete_non_existing_file():
     empty_name = ""
 
     # Act
-    try:
-        delete_file(empty_name)
-    except (NameError, ValueError):
-        # Should not raise any exceptions if file not exists
-        assert False
-
-    # No exceptions was raised if file not exists
-    assert True
+    # Assert - if no exceptions - PASS
+    delete_file(empty_name)

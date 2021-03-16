@@ -1,5 +1,7 @@
 import os
 
+import pytest
+
 from FileServerApp.utils import check_file_existence
 
 
@@ -13,15 +15,9 @@ def test_file_exist(prepare_test_environment, create_file_module):
 
 def test_file_none():
     # Act
-    try:
+    # Should raise ValueError if filename is None
+    with pytest.raises(ValueError):
         check_file_existence(None)
-    except ValueError:
-        # Should raise ValueError if name is none
-        assert True
-        return
-
-    # Failed, should raise ValueError if none
-    assert True
 
 
 def test_file_not_exists():
@@ -30,13 +26,6 @@ def test_file_not_exists():
     empty_name = ""
 
     # Act
-    try:
+    # Should raise NameError if file provided, but not exists
+    with pytest.raises(NameError):
         check_file_existence(empty_name)
-    except NameError:
-        # Should raise NameError if file provided, but not exists
-        assert True
-        return
-
-    # Failed in case of absent of file
-    assert True
-

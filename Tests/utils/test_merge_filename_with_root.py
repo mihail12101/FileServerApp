@@ -1,5 +1,7 @@
 import os
 
+import pytest
+
 from FileServerApp.utils import merge_filename_with_root
 
 
@@ -11,15 +13,9 @@ def test_file_exists(prepare_test_environment, create_file_module):
 
 def test_file_none():
     # Act
-    try:
+    # Should raise ValueError if name was not provided
+    with pytest.raises(ValueError):
         merge_filename_with_root(None)
-    except ValueError:
-        # Should raise ValueError if name was not provided
-        assert True
-        return
-
-    # Failed in case of not provided filename
-    assert False
 
 
 def test_file_not_exists(prepare_test_environment):
@@ -32,5 +28,3 @@ def test_file_not_exists(prepare_test_environment):
 
     # Assert
     assert path == os.path.join(prepare_test_environment, empty_name)
-
-
