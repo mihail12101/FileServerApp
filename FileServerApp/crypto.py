@@ -4,10 +4,10 @@ import os
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
-from config import ENVVAR_NAME_ROOT, KEY_FOLDER
+from FileServerApp.config import ENVVAR_NAME_ROOT, KEY_FOLDER
 
 
-class BaseCipher(object):
+class BaseCipher:
     """BaseCipher class"""
 
     def __init__(self):
@@ -34,7 +34,7 @@ class AESCipher(BaseCipher):
     def encrypt(self, data):
         self.key = get_random_bytes(16)
         cipher = AES.new(self.key, AES.MODE_EAX)
-        cipher_text, tag = cipher.encrypt_and_digest(data)
+        cipher_text, tag = cipher.encrypt_and_digest(data.encode("utf8"))
         return cipher_text, tag, cipher.nonce, self.key
 
     def decrypt(self, i_file, key_filename):

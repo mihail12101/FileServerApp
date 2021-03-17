@@ -2,9 +2,9 @@ import logging
 import os
 from collections import OrderedDict
 
-from config import DEFAULT_FILE_CONTENT, LOG_LEVEL, LOG_FORMAT
-from crypto import AESCipher
-from utils import generate_random_file_name, merge_filename_with_root, check_file_existence, convert_datetime
+from FileServerApp.config import DEFAULT_FILE_CONTENT, LOG_LEVEL, LOG_FORMAT
+from FileServerApp.crypto import AESCipher
+from FileServerApp.utils import generate_random_file_name, merge_filename_with_root, check_file_existence, convert_datetime
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -32,10 +32,10 @@ def read_file(name):
     file_path = check_file_existence(name)
     aes = AESCipher()
 
-    with open(file_path, "rt") as r_file:
+    with open(file_path, "rb") as r_file:
         content = aes.decrypt(r_file, "AES_{}".format(name))
 
-    return content
+    return content.decode("utf-8")
 
 
 def delete_file(name):
@@ -62,7 +62,7 @@ def create_file():
     dst_path = merge_filename_with_root(file_name)
     aes = AESCipher()
 
-    with open(dst_path, "wt") as new_file:
+    with open(dst_path, "wb") as new_file:
         key_filename = aes.write_chiper_text(DEFAULT_FILE_CONTENT, new_file, file_name)
 
     logger.info("File {} was created".format(file_name))
