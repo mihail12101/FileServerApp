@@ -1,10 +1,27 @@
 import hashlib
+import logging
 import os
 
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
-from FileServerApp.config import ENVVAR_NAME_ROOT, KEY_FOLDER
+from FileServerApp.config import ENVVAR_NAME_ROOT, KEY_FOLDER, LOG_LEVEL, LOG_FORMAT
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# create console handler and set level to debug
+ch = logging.StreamHandler()
+ch.setLevel(LOG_LEVEL)
+
+# create formatter
+formatter = logging.Formatter(LOG_FORMAT)
+
+# add formatter to ch
+ch.setFormatter(formatter)
+
+# add ch to logger
+logger.addHandler(ch)
 
 
 class BaseCipher:
@@ -64,7 +81,7 @@ class RSAChiper(AESCipher):
     pass
 
 
-class Hasher(object):
+class Hasher:
     @staticmethod
     def hash_md5(sign_str):
         """Return hash for signature string
@@ -72,17 +89,29 @@ class Hasher(object):
         :param sign_str:
         :return: hash in hex
         """
-        hash_obj = hashlib.md5(sign_str)
+        hash_obj = hashlib.md5(sign_str.encode())
         return hash_obj.digest()
 
+    @staticmethod
+    def save_hash(save_path, md5_hash):
+        with open(save_path, "wb") as new_file:
+            new_file.write(md5_hash)
 
-def prepare_signature_str(ordered_signature):
-    """Build signature string from OrderedDict with metadata
+        logger.info("File {} was created".format(save_path))
 
-    :param ordered_signature: OrderedDict with metadata
-    :return: string signature
-    """
-    return "{}_{}_{}_{}".format(ordered_signature.get('name'),
-                                ordered_signature.get('create_date'),
-                                ordered_signature.get('size'),
-                                ordered_signature.get('content'))
+    @staticmethod
+    def get_hash_from_file(hash_file_path):
+        with open(hash_file_path, "rb") as new_file:
+            return new_file.read()
+
+    @staticmethod
+    def prepare_signature_str(ordered_signature):
+        """Build signature string from OrderedDict with metadata
+
+        :param ordered_signature: OrderedDict with metadata
+        :return: string signature
+        """
+        return "{}_{}_{}_{}".format(ordered_signature.get('name'),
+                                    ordered_signature.get('create_date'),
+                                    ordered_signature.get('size'),
+                                    ordered_signature.get('content'))

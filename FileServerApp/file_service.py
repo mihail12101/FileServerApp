@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from FileServerApp.config import DEFAULT_FILE_CONTENT, LOG_LEVEL, LOG_FORMAT
 from FileServerApp.crypto import AESCipher
-from FileServerApp.utils import generate_random_file_name, merge_filename_with_root, check_file_existence, convert_datetime
+from FileServerApp.utils import generate_random_file_name, check_file_existence, convert_datetime
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

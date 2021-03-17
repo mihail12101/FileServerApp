@@ -11,7 +11,7 @@ import os
 import random
 from datetime import datetime
 
-from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION, SYMBOLS, DATE_TIME_FORMAT
+from FileServerApp.config import FILENAME_LEN, SYMBOLS, DATE_TIME_FORMAT
 
 
 def get_path_from_arg(path):
@@ -47,7 +47,7 @@ def param_is_not_none(func_to_dec):
         if arg[1] is None:
             raise ValueError("Parameter - name is absent or has wrong value")
 
-        return func_to_dec(arg[0], arg[1])
+        return func_to_dec(*arg)
 
     return wrapper
 
