@@ -1,8 +1,10 @@
 import logging
 import os
+from collections import OrderedDict
 
 from config import DEFAULT_FILE_CONTENT, LOG_LEVEL, LOG_FORMAT
-from utils import generate_random_file_name, merge_filename_with_root, check_file_existence
+from crypto import AESCipher
+from utils import generate_random_file_name, merge_filename_with_root, check_file_existence, convert_datetime
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -28,11 +30,12 @@ def read_file(name):
     :return: string with <file content>
     """
     file_path = check_file_existence(name)
+    aes = AESCipher()
 
     with open(file_path, "rt") as r_file:
-        file_content = r_file.read()
+        content = aes.decrypt(r_file, "AES_{}".format(name))
 
-    return file_content
+    return content
 
 
 def delete_file(name):
@@ -51,19 +54,20 @@ def delete_file(name):
 
 
 def create_file():
-    """Create file with random file name
+    """Create file with random file name, encrypt data and save session_key
 
-    :return: string with <file name + file extension>
+    :return: filename and key_filename, both with extension
     """
     file_name = generate_random_file_name()
     dst_path = merge_filename_with_root(file_name)
+    aes = AESCipher()
 
     with open(dst_path, "wt") as new_file:
-        new_file.write(DEFAULT_FILE_CONTENT)
+        key_filename = aes.write_chiper_text(DEFAULT_FILE_CONTENT, new_file, file_name)
 
     logger.info("File {} was created".format(file_name))
 
-    return file_name
+    return file_name, key_filename
 
 
 def get_metadata(name):
@@ -73,4 +77,9 @@ def get_metadata(name):
     :return: stat obejct with metadata
     """
     file_path = check_file_existence(name)
-    return os.stat(file_path)
+    return OrderedDict(
+        name=name,
+        create_date=convert_datetime(os.path.getctime(file_path)),
+        size=os.path.getsize(file_path),
+        content=read_file(name)
+    )

@@ -7,7 +7,7 @@ from FileServerApp import file_service
 @contextmanager
 def create_file(prepare_test_environment):
     # Act
-    filename = file_service.create_file()
+    filename, key_filename = file_service.create_file()
 
     # Assert
     file_path = os.path.join(prepare_test_environment, filename)

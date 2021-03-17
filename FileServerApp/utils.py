@@ -9,8 +9,9 @@ List of available functions:
 """
 import os
 import random
+from datetime import datetime
 
-from config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT, SYMBOLS
+from config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT, SYMBOLS, DATE_TIME_FORMAT
 
 
 def get_path_from_arg(path):
@@ -42,6 +43,7 @@ def name_param_is_not_none(func_to_dec):
     :param func_to_dec: any called function, string with <file name + file extension>
     :return: decorated function
     """
+
     def wrapper(arg):
         if arg is None:
             raise ValueError("Parameter - name is absent or has wrong value")
@@ -83,3 +85,12 @@ def check_file_existence(name):
         raise NameError("Given file {} not exists in directory {}".format(name, file_path))
 
     return file_path
+
+
+def convert_datetime(timestamp):
+    """Convert date and time from timestamp
+
+    :param timestamp: datetime object
+    :return:string with date and time in DATE_TIME_FORMAT from config.py
+    """
+    return datetime.fromtimestamp(timestamp).strftime(DATE_TIME_FORMAT)

@@ -1,16 +1,18 @@
-from os import stat_result
+from collections import OrderedDict
 
 import pytest
 
 from FileServerApp.file_service import get_metadata
 
 
-def test_metadata_type(path_to_new_file):
+def test_metadata_type(create_file_module):
     # Act
-    meta = get_metadata(path_to_new_file)
+    meta = get_metadata(create_file_module)
 
     # Assert
-    assert isinstance(meta, stat_result)
+    assert isinstance(meta, OrderedDict)
+    for key in ("name", "create_date", "size", "content"):
+        assert key in meta
 
 
 def test_metadata_none_file_provided():

@@ -8,6 +8,12 @@ DEFAULT_FILE_CONTENT = "some_text"
 ENVVAR_NAME_ROOT = "FILE_SERVER_ROOT"
 SYMBOLS = ascii_letters + digits
 
+# DateTime
+DATE_TIME_FORMAT = "%Y.%m.%d %H:%M:%S"
+
+# Crypto
+KEY_FOLDER = "Keys"
+
 # Logger
 LOG_LEVEL = logging.INFO
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
