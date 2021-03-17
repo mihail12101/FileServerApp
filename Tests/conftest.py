@@ -5,7 +5,7 @@ import pytest
 from FileServerApp.config import ENVVAR_NAME_ROOT
 from FileServerApp.file_services.file_service import FileService
 from FileServerApp.file_services.file_service_signed import FileServiceSigned
-from Tests.fixtures import create_file
+from Tests.fixtures import create_file, create_aes_file
 
 """Test environment"""
 
@@ -16,6 +16,15 @@ def prepare_test_environment(tmpdir_factory):
     os.environ[ENVVAR_NAME_ROOT] = root_dir
 
     return root_dir
+
+
+"""AES creation fixtures"""
+
+
+@pytest.fixture(scope="module")
+def create_file_aes_module(prepare_test_environment):
+    with create_aes_file(**locals()) as new_file:
+        yield new_file
 
 
 """FileService creation fixtures"""

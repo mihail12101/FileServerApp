@@ -5,7 +5,7 @@ import os
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
-from FileServerApp.config import ENVVAR_NAME_ROOT, KEY_FOLDER, LOG_LEVEL, LOG_FORMAT
+from FileServerApp.config import ENVVAR_NAME_ROOT, KEY_FOLDER, LOG_LEVEL, LOG_FORMAT, FILE_EXTENSION
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -56,7 +56,7 @@ class AESCipher(BaseCipher):
 
     def decrypt(self, i_file, key_filename):
         nonce, tag, cipher_text = [i_file.read(x) for x in (16, 16, -1)]
-        dst_path = os.path.join(self.KEY_DIR, key_filename)
+        dst_path = os.path.join(self.KEY_DIR, key_filename + FILE_EXTENSION)
 
         with open(dst_path, "rb") as key_file:
             session_key = key_file.read()
@@ -67,7 +67,7 @@ class AESCipher(BaseCipher):
     def write_chiper_text(self, data, o_file, filename):
         cipher_text, tag, nonce, session_key = self.encrypt(data)
         key_filename = "AES_{}".format(filename)
-        dst_path = os.path.join(self.KEY_DIR, key_filename)
+        dst_path = os.path.join(self.KEY_DIR, key_filename + FILE_EXTENSION)
 
         with open(dst_path, "wb") as key_file:
             key_file.write(session_key)

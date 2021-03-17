@@ -7,5 +7,4 @@ def test_random_file_name():
     name = generate_random_file_name()
 
     # Assert
-    assert name.endswith(FILE_EXTENSION)
-    assert len(name) == FILENAME_LEN + len(FILE_EXTENSION)
+    assert len(name) == FILENAME_LEN
