@@ -11,7 +11,7 @@ import os
 import random
 from datetime import datetime
 
-from config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT, SYMBOLS, DATE_TIME_FORMAT
+from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT, SYMBOLS, DATE_TIME_FORMAT
 
 
 def get_path_from_arg(path):

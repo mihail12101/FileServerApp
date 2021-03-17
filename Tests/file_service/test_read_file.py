@@ -9,8 +9,8 @@ def test_read_existing_file(create_file_function):
     content = read_file(create_file_function)
 
     # Assert
-    assert isinstance(content, str)
-    assert content == DEFAULT_FILE_CONTENT
+    assert isinstance(content, bytes)
+    assert content.decode("utf8") == DEFAULT_FILE_CONTENT
 
 
 def test_read_none_file():
