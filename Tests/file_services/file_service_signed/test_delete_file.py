@@ -3,9 +3,9 @@ import os
 import pytest
 
 
-def test_delete_existing_file(file_service, create_signed_file_function):
+def test_delete_existing_file(file_service_signed, create_signed_file_function):
     # Act
-    file_service.delete_file(create_signed_file_function.get('file_name'))
+    file_service_signed.delete_file(create_signed_file_function.get('file_name'))
 
     # Assert
     assert not os.path.isfile(create_signed_file_function.get("file_path"))

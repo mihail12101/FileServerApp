@@ -1,6 +1,8 @@
+import os
+
 import pytest
 
-from FileServerApp.config import DEFAULT_FILE_CONTENT
+from FileServerApp.config import DEFAULT_FILE_CONTENT, MD5_PREFIX, FILE_EXTENSION
 
 
 def test_read_existing_file(file_service_signed, create_signed_file_function):
@@ -10,6 +12,13 @@ def test_read_existing_file(file_service_signed, create_signed_file_function):
     # Assert
     assert isinstance(content, str)
     assert content == DEFAULT_FILE_CONTENT
+
+def test_read_existing_file_with_wrong_singature(file_service_signed, create_signed_file_function):
+    with open(create_signed_file_function.get('file_path'), "a") as cr_file:
+        cr_file.write("some_add_text")
+
+    with pytest.raises(PermissionError):
+        file_service_signed.read_file(create_signed_file_function.get("file_name"))
 
 
 def test_read_none_file(file_service_signed):

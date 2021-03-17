@@ -45,11 +45,8 @@ class FileServiceSigned(FileService, Hasher):
 
     def __init__(self):
         super().__init__()
-        self.KEY_DIR = os.path.join(os.getenv(ENVVAR_NAME_ROOT), KEY_FOLDER)
 
-        if self.__work_dir:
-            return
-        else:
+        if not self.__work_dir:
             self.__work_dir = os.getenv(ENVVAR_NAME_ROOT)
 
         if self.__key_folder:
@@ -57,8 +54,8 @@ class FileServiceSigned(FileService, Hasher):
 
         self.__key_folder = os.path.join(os.getenv(ENVVAR_NAME_ROOT), KEY_FOLDER)
 
-        if not os.path.isdir(self.KEY_DIR):
-            os.mkdir(self.KEY_DIR)
+        if not os.path.isdir(self.__key_folder):
+            os.mkdir(self.__key_folder)
 
     @property
     def work_dir(self):
