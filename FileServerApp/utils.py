@@ -11,7 +11,7 @@ import os
 import random
 from datetime import datetime
 
-from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION, ENVVAR_NAME_ROOT, SYMBOLS, DATE_TIME_FORMAT
+from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION, SYMBOLS, DATE_TIME_FORMAT
 
 
 def get_path_from_arg(path):
@@ -32,59 +32,34 @@ def generate_random_file_name():
 
     :return: string with <file name + file extension>
     """
-    return "".join(random.choice(SYMBOLS) for _ in range(FILENAME_LEN)) + FILE_EXTENSION
+    return "".join(random.choice(SYMBOLS) for _ in range(FILENAME_LEN))
 
 
-def name_param_is_not_none(func_to_dec):
-    """Raise ValueError if given parameter 'name' is none
+def param_is_not_none(func_to_dec):
+    """Raise ValueError if given parameter 'name' is none, Decorator!
 
-    Decorator!
-
-    :param func_to_dec: any called function, string with <file name + file extension>
+    :param func_to_dec: any called function
     :return: decorated function
     """
 
-    def wrapper(arg):
-        if arg is None:
+    def wrapper(*arg):
+        # 0 is class obj, 1 is argument
+        if arg[1] is None:
             raise ValueError("Parameter - name is absent or has wrong value")
 
-        return func_to_dec(arg)
+        return func_to_dec(arg[0], arg[1])
 
     return wrapper
 
 
-@name_param_is_not_none
-def merge_filename_with_root(name):
-    """Common operations for work with files
+def check_file_existence(file_path):
+    """Raise FileExistsError if given path not exists
 
-        * Check that given file name is not None
-        * Getting WORK DIRECTORY from environment variables
-        * Concatanate WORK DIRECTORY and filename
-
-    :param name: string with <file name + file extension>
-    :return: string with <path to given file>
+    :param file_path: string with file_path
     """
-    work_directory = os.path.normpath(os.getenv(ENVVAR_NAME_ROOT))
-    return os.path.join(work_directory, name)
-
-
-@name_param_is_not_none
-def check_file_existence(name):
-    """Check for file existence
-
-        * Checks that name param is not None
-        * Builds path to provided file
-        * Check file existence
-
-    :param name: string with <file name + file extension>
-    :return: string with <path to given file>
-    """
-    file_path = merge_filename_with_root(name)
 
     if not os.path.isfile(file_path):
-        raise NameError("Given file {} not exists in directory {}".format(name, file_path))
-
-    return file_path
+        raise FileExistsError("Given file path {} not exists".format(file_path))
 
 
 def convert_datetime(timestamp):
