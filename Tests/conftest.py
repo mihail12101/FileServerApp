@@ -3,6 +3,7 @@ import os
 import pytest
 
 from FileServerApp.config import ENVVAR_NAME_ROOT
+from FileServerApp.file_services.file_service import FileService
 from Tests.fixtures import create_file
 
 """Test environment"""
@@ -19,23 +20,18 @@ def prepare_test_environment(tmpdir_factory):
 """File creation fixtures"""
 
 
+@pytest.fixture(scope="session")
+def file_service(prepare_test_environment):
+    return FileService()
+
+
 @pytest.fixture(scope="module")
-def create_file_module(prepare_test_environment):
+def create_file_module(file_service):
     with create_file(**locals()) as new_file:
         yield new_file
 
 
 @pytest.fixture(scope="function")
-def create_file_function(prepare_test_environment):
+def create_file_function(file_service):
     with create_file(**locals()) as new_file:
         yield new_file
-
-
-@pytest.fixture(scope="module")
-def path_to_new_file(prepare_test_environment, create_file_module):
-    return os.path.join(prepare_test_environment, create_file_module)
-
-
-@pytest.fixture(scope="function")
-def path_to_new_file_function(prepare_test_environment, create_file_function):
-    return os.path.join(prepare_test_environment, create_file_function)

@@ -7,7 +7,7 @@ from FileServerApp.utils import check_file_existence
 
 def test_file_exist(prepare_test_environment, create_file_module):
     # Act
-    path = check_file_existence(create_file_module)
+    check_file_existence(create_file_module)
 
     # Assert
     assert path == os.path.join(prepare_test_environment, create_file_module)

@@ -1,18 +1,20 @@
 import os
 from contextlib import contextmanager
 
-from FileServerApp import file_service
+from FileServerApp.config import FILE_EXTENSION
 
 
 @contextmanager
-def create_file(prepare_test_environment):
+def create_file(file_service):
     # Act
-    filename, key_filename = file_service.create_file()
+    file_name = file_service.create_file()
 
     # Assert
-    file_path = os.path.join(prepare_test_environment, filename)
+    file_path = os.path.join(file_service.work_dir, file_name + FILE_EXTENSION)
     assert os.path.isfile(file_path)
 
-    yield filename
+    yield {"file_name": file_name,
+           "file_path": file_path}
+
     if os.path.isfile(file_path):
         os.remove(file_path)
