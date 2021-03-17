@@ -18,4 +18,4 @@ def test_filename_content_after_creation(prepare_test_environment, path_to_new_f
     content = read_file(create_file_module)
 
     # Assert
-    assert content.decode("utf-8") == DEFAULT_FILE_CONTENT
+    assert content == DEFAULT_FILE_CONTENT

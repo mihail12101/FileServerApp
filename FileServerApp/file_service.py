@@ -35,7 +35,7 @@ def read_file(name):
     with open(file_path, "rb") as r_file:
         content = aes.decrypt(r_file, "AES_{}".format(name))
 
-    return content
+    return content.decode("utf-8")
 
 
 def delete_file(name):
