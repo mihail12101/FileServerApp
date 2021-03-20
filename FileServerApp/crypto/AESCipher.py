@@ -25,7 +25,7 @@ class AESCipher(BaseCipher):
             session_key = key_file.read()
 
         cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
-        return cipher_aes.decrypt_and_verify(cipher_text, tag)
+        return cipher_aes.decrypt_and_verify(cipher_text, tag).decode("utf8")
 
     def write_chiper_text(self, data, o_file, filename):
         cipher_text, tag, nonce, session_key = self.encrypt(data)
