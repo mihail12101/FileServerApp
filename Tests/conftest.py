@@ -18,6 +18,16 @@ def prepare_test_environment(tmpdir_factory):
     return root_dir
 
 
+@pytest.fixture()
+def change_root_dir(prepare_test_environment, tmpdir):
+    new_root = str(tmpdir)
+    os.environ[ENVVAR_NAME_ROOT] = new_root
+
+    yield new_root
+
+    os.environ[ENVVAR_NAME_ROOT] = prepare_test_environment
+
+
 """AES creation fixtures"""
 
 
@@ -52,7 +62,9 @@ def create_file_function(file_service):
 
 @pytest.fixture(scope="session")
 def file_service_signed(prepare_test_environment):
-    return FileServiceSigned()
+    fs_signed = FileServiceSigned()
+    assert os.path.isdir(fs_signed.key_folder)
+    return fs_signed
 
 
 @pytest.fixture(scope="module")
