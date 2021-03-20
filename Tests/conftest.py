@@ -3,8 +3,8 @@ import os
 import pytest
 
 from FileServerApp.config import ENVVAR_NAME_ROOT
-from FileServerApp.file_services.file_service import FileService
-from FileServerApp.file_services.file_service_signed import FileServiceSigned
+from FileServerApp.file_services import FileService
+from FileServerApp.file_services import FileServiceSigned
 from Tests.fixtures import create_file, create_aes_file
 
 """Test environment"""

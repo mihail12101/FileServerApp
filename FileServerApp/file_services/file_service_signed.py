@@ -3,26 +3,11 @@ import os
 
 from FileServerApp.config import ENVVAR_NAME_ROOT, FILE_EXTENSION
 from FileServerApp.config import KEY_FOLDER, MD5_PREFIX
-from FileServerApp.config import LOG_LEVEL, LOG_FORMAT
 from FileServerApp.crypto import Hasher
-from FileServerApp.file_services.file_service import FileService
+from FileServerApp.file_services import FileService
 from FileServerApp.utils import param_is_not_none, check_file_existence, convert_datetime
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-# create console handler and set level to debug
-ch = logging.StreamHandler()
-ch.setLevel(LOG_LEVEL)
-
-# create formatter
-formatter = logging.Formatter(LOG_FORMAT)
-
-# add formatter to ch
-ch.setFormatter(formatter)
-
-# add ch to logger
-logger.addHandler(ch)
 
 
 class FileServiceSigned(FileService, Hasher):
