@@ -1,4 +1,7 @@
 import json
+import os
+
+from FileServerApp.config import ENVVAR_NAME_ROOT
 
 
 async def test_get_file_list(client):
@@ -21,11 +24,14 @@ async def test_create_file_not_correct(client):
     assert r.status == 400
 
 
-async def test_change_file_dir_correct_key(client, tmpdir):
+async def test_change_file_dir_correct_key(client, tmpdir, prepare_test_environment):
     client, handler = tuple(client)
 
     r = await client.post("/change_file_dir", json={"new_path": f"{tmpdir}"})
     assert r.status == 200
+
+    # POST
+    os.environ[ENVVAR_NAME_ROOT] = prepare_test_environment
 
 
 async def test_change_file_dir_wrong_key(client, tmpdir):
@@ -33,6 +39,8 @@ async def test_change_file_dir_wrong_key(client, tmpdir):
 
     r = await client.post("/change_file_dir", json={"wrong_key": f"{tmpdir}"})
     assert r.status == 400
+
+
 
 
 async def test_get_file_data_correct(client):
