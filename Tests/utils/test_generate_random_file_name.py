@@ -1,4 +1,4 @@
-from FileServerApp.config import FILENAME_LEN, FILE_EXTENSION
+from FileServerApp.config import FILENAME_LEN
 from FileServerApp.utils import generate_random_file_name
 
 

@@ -9,6 +9,7 @@ from FileServerApp.crypto import AESCipher
 
 class RSACipher(AESCipher):
     """ RSA Cipher class """
+
     def __init__(self):
         super().__init__()
 

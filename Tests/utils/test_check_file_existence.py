@@ -3,9 +3,9 @@ import pytest
 from FileServerApp.utils import check_file_existence
 
 
-def test_file_exist(prepare_test_environment, create_file_module):
+def test_file_exist(prepare_test_environment, create_file_function):
     # Assertion, if no exeption - PASS
-    check_file_existence(create_file_module.get("file_path"))
+    check_file_existence(create_file_function.get("file_path"))
 
 
 def test_file_none():

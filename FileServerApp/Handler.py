@@ -83,4 +83,3 @@ class Handler:
             result += line.decode("utf-8")
 
         return json.loads(result)
-

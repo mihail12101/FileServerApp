@@ -114,4 +114,3 @@ class FileService:
 
         self.__work_dir = path
         os.environ[ENVVAR_NAME_ROOT] = self.__work_dir
-

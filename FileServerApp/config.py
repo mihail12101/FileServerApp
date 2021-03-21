@@ -2,7 +2,6 @@
 import logging
 from string import ascii_letters, digits
 
-
 # Environmnet
 ENVVAR_NAME_ROOT = "FILE_SERVER_ROOT"
 
