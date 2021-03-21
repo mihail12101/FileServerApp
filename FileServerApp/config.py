@@ -25,5 +25,8 @@ CERT_EXTENSION = ".pem"
 LOG_LEVEL = logging.INFO
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
+# Web Server
+DEFAULT_PORT = 8080
+
 # Other
 SYMBOLS = ascii_letters + digits

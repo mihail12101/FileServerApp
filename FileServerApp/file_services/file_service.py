@@ -3,26 +3,11 @@ import os
 
 from FileServerApp.config import DEFAULT_FILE_CONTENT
 from FileServerApp.config import ENVVAR_NAME_ROOT, FILE_EXTENSION
-from FileServerApp.config import LOG_LEVEL, LOG_FORMAT
 from FileServerApp.utils import check_file_existence
 from FileServerApp.utils import convert_datetime, param_is_not_none
 from FileServerApp.utils import generate_random_file_name
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-# create console handler and set level to debug
-ch = logging.StreamHandler()
-ch.setLevel(LOG_LEVEL)
-
-# create formatter
-formatter = logging.Formatter(LOG_FORMAT)
-
-# add formatter to ch
-ch.setFormatter(formatter)
-
-# add ch to logger
-logger.addHandler(ch)
 
 
 class FileService:
@@ -53,7 +38,7 @@ class FileService:
         return self.__work_dir
 
     @param_is_not_none
-    def read_file(self, file_name):
+    async def read_file(self, file_name):
         """Return content from the given file
 
         :param file_name: string with <file_name>
@@ -68,7 +53,7 @@ class FileService:
         return content
 
     @param_is_not_none
-    def delete_file(self, file_name):
+    async def delete_file(self, file_name):
         """Remove file if exists
 
         :param file_name: string with <file_name>
@@ -80,7 +65,7 @@ class FileService:
             os.remove(file_path)
             logger.info("File {} was removed".format(file_path))
 
-    def create_file(self):
+    async def create_file(self, content=DEFAULT_FILE_CONTENT):
         """Create file with random file name, encrypt data and save session_key
 
         :return: string with filename without extension
@@ -89,14 +74,14 @@ class FileService:
         file_path = os.path.join(self.__work_dir, file_name + FILE_EXTENSION)
 
         with open(file_path, "w", encoding="utf8") as new_file:
-            new_file.write(DEFAULT_FILE_CONTENT)
+            new_file.write(content)
 
         logger.info("File {} was created".format(file_name))
 
         return file_name
 
     @param_is_not_none
-    def get_metadata(self, file_name):
+    async def get_metadata(self, file_name):
         """Return stat object with metadata inside
 
         :param file_name: string with <file_name>
@@ -108,4 +93,25 @@ class FileService:
         return {"name": file_name,
                 "create_date": convert_datetime(os.path.getctime(file_path)),
                 "size": os.path.getsize(file_path),
-                "content": self.read_file(file_name)}
+                "content": await self.read_file(file_name)}
+
+    async def get_files(self):
+        files_data = {}
+
+        for file in os.listdir(self.work_dir):
+            file_path = os.path.join(self.work_dir, file)
+
+            if not os.path.isfile(file_path) or FILE_EXTENSION not in file:
+                continue
+
+            file_name_without_ext = os.path.splitext(file)[0]
+            files_data[file_name_without_ext] = await self.get_metadata(file_name_without_ext)
+
+        return files_data
+
+    async def change_work_dir(self, new_directory):
+        path = os.path.normpath(new_directory)
+
+        self.__work_dir = path
+        os.environ[ENVVAR_NAME_ROOT] = self.__work_dir
+
