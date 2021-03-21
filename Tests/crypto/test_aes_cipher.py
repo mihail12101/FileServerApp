@@ -1,7 +1,5 @@
 import os
 
-import pytest
-
 from FileServerApp.config import KEY_FOLDER, DEFAULT_FILE_CONTENT, FILE_EXTENSION
 
 
@@ -30,4 +28,3 @@ def test_aes_write_chiper_text_and_decrypt(create_file_module, aes_cipher):
         content = aes_cipher.decrypt(r_file, key_filename)
 
     assert content == data
-

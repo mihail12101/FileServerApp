@@ -1,6 +1,6 @@
 import pytest
 
-from FileServerApp.crypto import BaseCipher, AESCipher
+from FileServerApp.crypto import BaseCipher, AESCipher, RSACipher
 
 
 @pytest.fixture(scope="module")
@@ -11,3 +11,8 @@ def base_cipher():
 @pytest.fixture(scope="module")
 def aes_cipher():
     return AESCipher()
+
+
+@pytest.fixture(scope="module")
+def rsa_cipher():
+    return RSACipher()

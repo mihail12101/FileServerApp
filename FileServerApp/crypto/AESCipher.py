@@ -18,11 +18,7 @@ class AESCipher(BaseCipher):
         return cipher_text, tag, cipher.nonce, self.key
 
     def decrypt(self, i_file, key_filename):
-        nonce, tag, cipher_text = [i_file.read(x) for x in (16, 16, -1)]
-        dst_path = os.path.join(self.KEY_DIR, key_filename + FILE_EXTENSION)
-
-        with open(dst_path, "rb") as key_file:
-            session_key = key_file.read()
+        nonce, tag, cipher_text, session_key = super().decrypt(i_file, key_filename)
 
         cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
         return cipher_aes.decrypt_and_verify(cipher_text, tag).decode("utf8")

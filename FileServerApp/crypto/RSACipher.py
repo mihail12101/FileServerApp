@@ -1,13 +1,13 @@
 import os
 
-from Crypto.Cipher import PKCS1_OAEP
+from Crypto.Cipher import PKCS1_OAEP, AES
 from Crypto.PublicKey import RSA
 
 from FileServerApp.config import SECRET_CODE, RSA_PROTECTION, CERT_EXTENSION, FILE_EXTENSION
 from FileServerApp.crypto import AESCipher
 
 
-class RSAChiper(AESCipher):
+class RSACipher(AESCipher):
     """ RSA Cipher class """
     def __init__(self):
         super().__init__()
@@ -28,16 +28,13 @@ class RSAChiper(AESCipher):
         return cipher_text, tag, nonce, encrypted_session_key
 
     def decrypt(self, i_file, key_filename):
-        nonce, tag, cipher_text = [i_file.read(x) for x in (16, 16, -1)]
         cipher_rsa = PKCS1_OAEP.new(self.private_key)
 
-        session_key_path = os.path.join(self.KEY_DIR, key_filename + FILE_EXTENSION)
-        with open(session_key_path, "rb") as s_key_file:
-            session_key = s_key_file.read()
+        nonce, tag, cipher_text, session_key = super(AESCipher, self).decrypt(i_file, key_filename)
 
         session_key = cipher_rsa.decrypt(session_key)
-
-        return super().decrypt(cipher_text, tag, nonce, session_key)
+        cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
+        return cipher_aes.decrypt_and_verify(cipher_text, tag).decode("utf8")
 
     def write_chiper_text(self, data, o_file, filename):
         cipher_text, tag, nonce, session_key = self.encrypt(data)
@@ -49,6 +46,8 @@ class RSAChiper(AESCipher):
                 s_key_file.write(session_key)
 
         o_file.write(nonce + tag + cipher_text)
+
+        return key_filename
 
     def generate_public_and_private_keys(self):
         key = RSA.generate(2048)
