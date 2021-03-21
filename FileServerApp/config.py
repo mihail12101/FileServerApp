@@ -17,6 +17,9 @@ DATE_TIME_FORMAT = "%Y.%m.%d %H:%M:%S"
 # Crypto
 KEY_FOLDER = "Keys"
 MD5_PREFIX = "MD5_"
+SECRET_CODE = "UBS91LvFzTo8MbIVlI1u"
+RSA_PROTECTION = "scryptAndAES128-CBC"
+CERT_EXTENSION = ".pem"
 
 # Logger
 LOG_LEVEL = logging.INFO

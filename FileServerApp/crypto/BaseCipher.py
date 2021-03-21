@@ -1,6 +1,6 @@
 import os
 
-from FileServerApp.config import ENVVAR_NAME_ROOT, KEY_FOLDER
+from FileServerApp.config import ENVVAR_NAME_ROOT, KEY_FOLDER, FILE_EXTENSION
 
 
 class BaseCipher:
@@ -17,7 +17,13 @@ class BaseCipher:
         pass
 
     def decrypt(self, i_file, key_filename):
-        pass
+        nonce, tag, cipher_text = [i_file.read(x) for x in (16, 16, -1)]
+        dst_path = os.path.join(self.KEY_DIR, key_filename + FILE_EXTENSION)
+
+        with open(dst_path, "rb") as key_file:
+            session_key = key_file.read()
+
+        return nonce, tag, cipher_text, session_key
 
     def write_chiper_text(self, data, o_file, filename):
         pass
