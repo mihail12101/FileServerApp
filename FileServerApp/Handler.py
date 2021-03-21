@@ -11,10 +11,7 @@ class Handler:
         self.file_service_signed = FileServiceSigned()
 
     async def get_file_list(self, *args) -> web.Response:
-        try:
-            files = await self.file_service.get_files()
-        except Exception as e:
-            raise web.HTTPBadRequest(text=str(e))
+        files = await self.file_service.get_files()
 
         return web.json_response(data={
             "status": 'success',
@@ -23,7 +20,7 @@ class Handler:
 
     async def get_file_data(self, request: web.Request, *args) -> web.Response:
 
-        file_name = request.rel_url.query['filename']
+        file_name = request.rel_url.query['file_name']
         try:
             file_data = await self.file_service.get_metadata(file_name)
         except Exception as e:
@@ -52,14 +49,11 @@ class Handler:
 
         file_name = request.match_info['file_name']
 
-        try:
-            await self.file_service.delete_file(file_name)
-            return web.json_response(data={
-                "status": 'success',
-                "message": f"File {file_name} was removed"
-            })
-        except Exception as e:
-            raise web.HTTPBadRequest(text=str(e))
+        await self.file_service.delete_file(file_name)
+        return web.json_response(data={
+            "status": 'success',
+            "message": f"File {file_name} was removed"
+        })
 
     async def change_work_dir(self, request: web.Request, *args) -> web.Response:
         try:

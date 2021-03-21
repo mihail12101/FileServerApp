@@ -1,7 +1,9 @@
 import os
 
 import pytest
+from aiohttp import web
 
+from FileServerApp.Handler import Handler
 from FileServerApp.config import ENVVAR_NAME_ROOT, FILE_EXTENSION
 from FileServerApp.file_services import FileService
 from FileServerApp.file_services import FileServiceSigned
@@ -27,7 +29,21 @@ def change_root_dir(prepare_test_environment, tmpdir):
     os.environ[ENVVAR_NAME_ROOT] = prepare_test_environment
 
 
-"""AES creation fixtures"""
+""" Web Server """
+
+@pytest.fixture
+def client(loop, aiohttp_client):
+    handler = Handler()
+    app = web.Application()
+    app.add_routes([
+        web.get("/files/list", handler.get_file_list),
+        web.get("/files", handler.get_file_data),
+        web.post("/files", handler.create_file),
+        web.delete("/files/{file_name}", handler.delete_file),
+        web.post("/change_file_dir", handler.change_work_dir)
+    ])
+
+    return loop.run_until_complete(aiohttp_client(app)), handler
 
 """FileService creation fixtures"""
 

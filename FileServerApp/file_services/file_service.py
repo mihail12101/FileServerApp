@@ -101,11 +101,9 @@ class FileService:
         for file in os.listdir(self.work_dir):
             file_path = os.path.join(self.work_dir, file)
 
-            if not os.path.isfile(file_path) or FILE_EXTENSION not in file:
-                continue
-
-            file_name_without_ext = os.path.splitext(file)[0]
-            files_data[file_name_without_ext] = await self.get_metadata(file_name_without_ext)
+            if os.path.isfile(file_path) and FILE_EXTENSION in file:
+                file_name_without_ext = os.path.splitext(file)[0]
+                files_data[file_name_without_ext] = await self.get_metadata(file_name_without_ext)
 
         return files_data
 
