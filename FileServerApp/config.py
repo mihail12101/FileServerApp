@@ -2,7 +2,6 @@
 import logging
 from string import ascii_letters, digits
 
-
 # Environmnet
 ENVVAR_NAME_ROOT = "FILE_SERVER_ROOT"
 
@@ -24,6 +23,9 @@ CERT_EXTENSION = ".pem"
 # Logger
 LOG_LEVEL = logging.INFO
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+# Web Server
+DEFAULT_PORT = 8080
 
 # Other
 SYMBOLS = ascii_letters + digits

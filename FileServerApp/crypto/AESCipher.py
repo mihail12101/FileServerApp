@@ -4,7 +4,7 @@ from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
 from FileServerApp.config import FILE_EXTENSION
-from FileServerApp.crypto import BaseCipher
+from FileServerApp.crypto.BaseCipher import BaseCipher
 
 
 class AESCipher(BaseCipher):

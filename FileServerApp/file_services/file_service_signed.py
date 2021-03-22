@@ -1,7 +1,7 @@
 import logging
 import os
 
-from FileServerApp.config import ENVVAR_NAME_ROOT, FILE_EXTENSION
+from FileServerApp.config import ENVVAR_NAME_ROOT, FILE_EXTENSION, DEFAULT_FILE_CONTENT
 from FileServerApp.config import KEY_FOLDER, MD5_PREFIX
 from FileServerApp.crypto import Hasher
 from FileServerApp.file_services import FileService
@@ -49,20 +49,20 @@ class FileServiceSigned(FileService, Hasher):
         return self.__key_folder
 
     @param_is_not_none
-    def read_file(self, file_name):
+    async def read_file(self, file_name):
         """Return content from the given file
 
         :param file_name: string with <file_name>
         :return: string with <file content>
         """
-        content = super().read_file(file_name)
+        content = await super().read_file(file_name)
 
         # Signing process
         hash_file = MD5_PREFIX + file_name + FILE_EXTENSION
         hash_file_path = os.path.join(self.__key_folder, hash_file)
 
         # Getting hash
-        md5_hash_metadata = self.get_hash_from_metadata(file_name)
+        md5_hash_metadata = await self.get_hash_from_metadata(file_name)
         hash_from_file = self.get_hash_from_file(hash_file_path)
 
         if hash_from_file != md5_hash_metadata:
@@ -71,13 +71,13 @@ class FileServiceSigned(FileService, Hasher):
         return content
 
     @param_is_not_none
-    def delete_file(self, file_name):
+    async def delete_file(self, file_name):
         """Remove file if exists
 
         :param file_name: string with <file_name>
         :return: None
         """
-        super().delete_file(file_name)
+        await super().delete_file(file_name)
 
         # Deletion hash file
         hash_file = MD5_PREFIX + file_name + FILE_EXTENSION
@@ -87,19 +87,19 @@ class FileServiceSigned(FileService, Hasher):
             os.remove(hash_file_path)
             logger.info("File {} was removed".format(hash_file_path))
 
-    def create_file(self):
+    async def create_file(self, content=DEFAULT_FILE_CONTENT):
         """Create file with random file name, encrypt data and save session_key
 
         :return: string with filename without extension
         """
-        file_name = super().create_file()
+        file_name = await super().create_file()
 
         # Signing process
         hash_file = MD5_PREFIX + file_name + FILE_EXTENSION
         file_path = os.path.join(self.__key_folder, hash_file)
 
         # Getting hash
-        md5_hash = self.get_hash_from_metadata(file_name)
+        md5_hash = await self.get_hash_from_metadata(file_name)
 
         # Save hash
         self.save_hash(file_path, md5_hash)
@@ -107,7 +107,7 @@ class FileServiceSigned(FileService, Hasher):
         return file_name
 
     @param_is_not_none
-    def __get_metadata(self, file_name):
+    async def __get_metadata(self, file_name):
         """Return stat object with metadata inside
 
         :param file_name: string with <file_name>
@@ -119,10 +119,10 @@ class FileServiceSigned(FileService, Hasher):
         return {"name": file_name,
                 "create_date": convert_datetime(os.path.getctime(file_path)),
                 "size": os.path.getsize(file_path),
-                "content": super().read_file(file_name)}
+                "content": await super().read_file(file_name)}
 
     @param_is_not_none
-    def get_hash_from_metadata(self, file_name):
-        meta = self.__get_metadata(file_name)
+    async def get_hash_from_metadata(self, file_name):
+        meta = await self.__get_metadata(file_name)
         signature = self.prepare_signature_str(meta)
         return self.hash_md5(signature)

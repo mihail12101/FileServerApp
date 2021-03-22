@@ -1,11 +1,12 @@
 import os
 
 import pytest
+from aiohttp import web
 
-from FileServerApp.config import ENVVAR_NAME_ROOT
+from FileServerApp.Handler import Handler
+from FileServerApp.config import ENVVAR_NAME_ROOT, FILE_EXTENSION
 from FileServerApp.file_services import FileService
 from FileServerApp.file_services import FileServiceSigned
-from Tests.fixtures import create_file
 
 """Test environment"""
 
@@ -18,7 +19,7 @@ def prepare_test_environment(tmpdir_factory):
     return root_dir
 
 
-@pytest.fixture()
+@pytest.fixture
 def change_root_dir(prepare_test_environment, tmpdir):
     new_root = str(tmpdir)
     os.environ[ENVVAR_NAME_ROOT] = new_root
@@ -28,7 +29,21 @@ def change_root_dir(prepare_test_environment, tmpdir):
     os.environ[ENVVAR_NAME_ROOT] = prepare_test_environment
 
 
-"""AES creation fixtures"""
+""" Web Server """
+
+@pytest.fixture
+def client(loop, aiohttp_client):
+    handler = Handler()
+    app = web.Application()
+    app.add_routes([
+        web.get("/files/list", handler.get_file_list),
+        web.get("/files", handler.get_file_data),
+        web.post("/files", handler.create_file),
+        web.delete("/files/{file_name}", handler.delete_file),
+        web.post("/change_file_dir", handler.change_work_dir)
+    ])
+
+    return loop.run_until_complete(aiohttp_client(app)), handler
 
 """FileService creation fixtures"""
 
@@ -38,16 +53,20 @@ def file_service(prepare_test_environment):
     return FileService()
 
 
-@pytest.fixture(scope="module")
-def create_file_module(file_service):
-    with create_file(file_service) as new_file:
-        yield new_file
-
-
 @pytest.fixture(scope="function")
-def create_file_function(file_service):
-    with create_file(file_service) as new_file:
-        yield new_file
+async def create_file_function(file_service, loop):
+    # Act
+    file_name = await file_service.create_file()
+
+    # Assert
+    file_path = os.path.join(file_service.work_dir, file_name + FILE_EXTENSION)
+    assert os.path.isfile(file_path)
+
+    yield {"file_name": file_name,
+           "file_path": file_path}
+
+    if os.path.isfile(file_path):
+        os.remove(file_path)
 
 
 """FileServiceSigned creation fixtures"""
@@ -60,13 +79,17 @@ def file_service_signed(prepare_test_environment):
     return fs_signed
 
 
-@pytest.fixture(scope="module")
-def create_signed_file_module(file_service_signed):
-    with create_file(file_service_signed) as new_file:
-        yield new_file
-
-
 @pytest.fixture(scope="function")
-def create_signed_file_function(file_service_signed):
-    with create_file(file_service_signed) as new_file:
-        yield new_file
+async def create_signed_file_function(file_service_signed, loop):
+    # Act
+    file_name = await file_service_signed.create_file()
+
+    # Assert
+    file_path = os.path.join(file_service_signed.work_dir, file_name + FILE_EXTENSION)
+    assert os.path.isfile(file_path)
+
+    yield {"file_name": file_name,
+           "file_path": file_path}
+
+    if os.path.isfile(file_path):
+        os.remove(file_path)
